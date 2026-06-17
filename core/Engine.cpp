@@ -20,6 +20,22 @@ namespace vws
         std::cout << "Prototypes loaded: " << world_.prototype_count() << std::endl;
         std::cout << "World objects loaded: " << world_.object_count() << std::endl;
 
+        for (const auto &object : world_.objects())
+        {
+            std::cout
+                << "Object " << object.id
+                << " | " << object_type_to_string(object.type)
+                << " | " << object.name
+                << " | pos=("
+                << object.transform.position.x << ", "
+                << object.transform.position.y << ")"
+                << " | size=("
+                << object.dimensions.length_m << ", "
+                << object.dimensions.width_m << ", "
+                << object.dimensions.height_m << ")"
+                << std::endl;
+        }
+
         for (std::uint64_t i = 0; i < total_ticks_; ++i)
         {
             tick(i);
@@ -52,17 +68,23 @@ namespace vws
         world_.add_object(
             ObjectType::Vehicle,
             "vehicle_001",
-            "vehicle.prototype.basic");
+            "vehicle.prototype.basic",
+            Transform{Vec2{0.0, 0.0}, 0.0},
+            Dimensions{4.5, 1.8, 1.5});
 
         world_.add_object(
             ObjectType::Street,
             "street_001",
-            "street.prototype.basic");
+            "street.prototype.basic",
+            Transform{Vec2{0.0, 0.0}, 0.0},
+            Dimensions{100.0, 7.0, 0.0});
 
         world_.add_object(
             ObjectType::TrafficLight,
             "traffic_light_001",
-            "traffic_light.prototype.basic");
+            "traffic_light.prototype.basic",
+            Transform{Vec2{50.0, 0.0}, 0.0},
+            Dimensions{0.5, 0.5, 3.0});
     }
 
     void Engine::tick(std::uint64_t tick_number)

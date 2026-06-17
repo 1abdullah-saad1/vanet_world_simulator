@@ -20,6 +20,25 @@ namespace vws
         NoiseZone
     };
 
+    struct Vec2
+    {
+        double x = 0.0;
+        double y = 0.0;
+    };
+
+    struct Transform
+    {
+        Vec2 position;
+        double heading_rad = 0.0;
+    };
+
+    struct Dimensions
+    {
+        double length_m = 0.0;
+        double width_m = 0.0;
+        double height_m = 0.0;
+    };
+
     inline std::string object_type_to_string(ObjectType type)
     {
         switch (type)

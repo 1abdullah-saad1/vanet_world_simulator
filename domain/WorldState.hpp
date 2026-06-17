@@ -30,13 +30,17 @@ namespace vws
         ObjectId add_object(
             ObjectType type,
             const std::string &name,
-            const std::string &prototype_id)
+            const std::string &prototype_id,
+            Transform transform,
+            Dimensions dimensions)
         {
             WorldObject object;
             object.id = next_id_++;
             object.type = type;
             object.name = name;
             object.prototype_id = prototype_id;
+            object.transform = transform;
+            object.dimensions = dimensions;
             object.active = true;
 
             objects_.push_back(object);

@@ -15,6 +15,9 @@ namespace vws
         std::string name;
         std::string prototype_id;
 
+        Transform transform;
+        Dimensions dimensions;
+
         bool active = true;
     };
 
