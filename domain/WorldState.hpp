@@ -2,6 +2,7 @@
 
 #include "domain/WorldObject.hpp"
 #include "domain/Prototype.hpp"
+#include "domain/Vehicle.hpp"
 
 #include <vector>
 #include <string>
@@ -48,6 +49,24 @@ namespace vws
             return object.id;
         }
 
+        void add_vehicle_state(
+            ObjectId object_id,
+            double speed_mps,
+            double acceleration_mps2,
+            int lane_id,
+            double fuel_percent)
+        {
+            VehicleState state;
+            state.object_id = object_id;
+            state.speed_mps = speed_mps;
+            state.acceleration_mps2 = acceleration_mps2;
+            state.lane_id = lane_id;
+            state.fuel_percent = fuel_percent;
+            state.active = true;
+
+            vehicle_states_.push_back(state);
+        }
+
         const Prototype *find_prototype(const std::string &prototype_id) const
         {
             for (const auto &prototype : prototypes_)
@@ -55,6 +74,19 @@ namespace vws
                 if (prototype.id == prototype_id)
                 {
                     return &prototype;
+                }
+            }
+
+            return nullptr;
+        }
+
+        const VehicleState *find_vehicle_state(ObjectId object_id) const
+        {
+            for (const auto &state : vehicle_states_)
+            {
+                if (state.object_id == object_id)
+                {
+                    return &state;
                 }
             }
 
@@ -71,6 +103,11 @@ namespace vws
             return prototypes_.size();
         }
 
+        std::size_t vehicle_state_count() const
+        {
+            return vehicle_states_.size();
+        }
+
         const std::vector<WorldObject> &objects() const
         {
             return objects_;
@@ -81,11 +118,17 @@ namespace vws
             return prototypes_;
         }
 
+        const std::vector<VehicleState> &vehicle_states() const
+        {
+            return vehicle_states_;
+        }
+
     private:
         ObjectId next_id_ = 1;
 
         std::vector<WorldObject> objects_;
         std::vector<Prototype> prototypes_;
+        std::vector<VehicleState> vehicle_states_;
     };
 
 }

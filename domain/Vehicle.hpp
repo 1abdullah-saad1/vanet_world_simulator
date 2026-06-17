@@ -1,19 +1,22 @@
 #pragma once
 
-#include "domain/Prototype.hpp"
-#include "domain/WorldObject.hpp"
+#include "domain/Types.hpp"
 
-namespace vanet {
+namespace vws
+{
 
-class Vehicle : public WorldObject {
-public:
-    Vehicle(ObjectId objectId = 0, Prototype vehiclePrototype = {})
-        : WorldObject(objectId), prototype(vehiclePrototype) {}
+    struct VehicleState
+    {
+        ObjectId object_id = 0;
 
-    const Prototype& getPrototype() const { return prototype; }
+        double speed_mps = 0.0;
+        double acceleration_mps2 = 0.0;
 
-private:
-    Prototype prototype;
-};
+        int lane_id = 1;
 
-}  // namespace vanet
+        double fuel_percent = 100.0;
+
+        bool active = true;
+    };
+
+}

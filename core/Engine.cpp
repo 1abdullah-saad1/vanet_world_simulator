@@ -19,6 +19,7 @@ namespace vws
 
         std::cout << "Prototypes loaded: " << world_.prototype_count() << std::endl;
         std::cout << "World objects loaded: " << world_.object_count() << std::endl;
+        std::cout << "Vehicle states loaded: " << world_.vehicle_state_count() << std::endl;
 
         for (const auto &object : world_.objects())
         {
@@ -44,6 +45,23 @@ namespace vws
                 << size.width_m << ", "
                 << size.height_m << ")"
                 << std::endl;
+
+            if (object.type == ObjectType::Vehicle)
+            {
+                const VehicleState *vehicle_state = world_.find_vehicle_state(object.id);
+
+                if (vehicle_state != nullptr)
+                {
+                    std::cout
+                        << "VehicleState"
+                        << " | object=" << vehicle_state->object_id
+                        << " | speed=" << vehicle_state->speed_mps << " m/s"
+                        << " | acceleration=" << vehicle_state->acceleration_mps2 << " m/s2"
+                        << " | lane=" << vehicle_state->lane_id
+                        << " | fuel=" << vehicle_state->fuel_percent << "%"
+                        << std::endl;
+                }
+            }
         }
 
         for (std::uint64_t i = 0; i < total_ticks_; ++i)
@@ -78,11 +96,18 @@ namespace vws
 
     void Engine::initialize_world()
     {
-        world_.add_object(
+        const ObjectId vehicle_id = world_.add_object(
             ObjectType::Vehicle,
             "vehicle_001",
             "vehicle.prototype.basic",
             Transform{Vec2{0.0, 0.0}, 0.0});
+
+        world_.add_vehicle_state(
+            vehicle_id,
+            0.0,
+            0.0,
+            1,
+            100.0);
 
         world_.add_object(
             ObjectType::Street,
@@ -103,6 +128,7 @@ namespace vws
             << "Tick " << tick_number
             << " | objects=" << world_.object_count()
             << " | prototypes=" << world_.prototype_count()
+            << " | vehicles=" << world_.vehicle_state_count()
             << std::endl;
     }
 
