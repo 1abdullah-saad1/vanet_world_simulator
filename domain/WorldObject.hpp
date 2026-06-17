@@ -2,17 +2,20 @@
 
 #include "domain/Types.hpp"
 
-namespace vanet {
+#include <string>
 
-class WorldObject {
-public:
-    explicit WorldObject(ObjectId objectId = 0) : id(objectId) {}
-    virtual ~WorldObject() = default;
+namespace vws
+{
 
-    ObjectId getId() const { return id; }
+    struct WorldObject
+    {
+        ObjectId id = 0;
+        ObjectType type = ObjectType::Unknown;
 
-private:
-    ObjectId id;
-};
+        std::string name;
+        std::string prototype_id;
 
-}  // namespace vanet
+        bool active = true;
+    };
+
+}

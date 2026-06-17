@@ -5,22 +5,25 @@
 
 #include <cstdint>
 
-namespace vws {
+namespace vws
+{
 
-class Engine {
-public:
-    Engine();
+    class Engine
+    {
+    public:
+        Engine();
 
-    void run();
+        void run();
 
-private:
-    void tick(std::uint64_t tick_number);
+    private:
+        void initialize_world();
+        void tick(std::uint64_t tick_number);
 
-private:
-    WorldState world_;
-    TickClock clock_;
+    private:
+        WorldState world_;
+        TickClock clock_;
 
-    std::uint64_t total_ticks_;
-};
+        std::uint64_t total_ticks_;
+    };
 
 }

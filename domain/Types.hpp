@@ -3,10 +3,44 @@
 #include <cstdint>
 #include <string>
 
-namespace vanet {
+namespace vws
+{
 
-using ObjectId = std::uint64_t;
-using Tick = std::uint64_t;
-using Name = std::string;
+    using ObjectId = std::uint64_t;
 
-}  // namespace vanet
+    enum class ObjectType
+    {
+        Unknown,
+        Vehicle,
+        Street,
+        TrafficLight,
+        Building,
+        Pedestrian,
+        RSU,
+        NoiseZone
+    };
+
+    inline std::string object_type_to_string(ObjectType type)
+    {
+        switch (type)
+        {
+        case ObjectType::Vehicle:
+            return "Vehicle";
+        case ObjectType::Street:
+            return "Street";
+        case ObjectType::TrafficLight:
+            return "TrafficLight";
+        case ObjectType::Building:
+            return "Building";
+        case ObjectType::Pedestrian:
+            return "Pedestrian";
+        case ObjectType::RSU:
+            return "RSU";
+        case ObjectType::NoiseZone:
+            return "NoiseZone";
+        default:
+            return "Unknown";
+        }
+    }
+
+}
