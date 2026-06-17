@@ -13,6 +13,8 @@ namespace vws
         ObjectType type = ObjectType::Unknown;
         std::string label;
 
+        Dimensions dimensions;
+
         bool active = true;
     };
 

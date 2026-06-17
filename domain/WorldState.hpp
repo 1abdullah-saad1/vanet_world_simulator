@@ -16,12 +16,14 @@ namespace vws
         void add_prototype(
             const std::string &prototype_id,
             ObjectType type,
-            const std::string &label)
+            const std::string &label,
+            Dimensions dimensions)
         {
             Prototype prototype;
             prototype.id = prototype_id;
             prototype.type = type;
             prototype.label = label;
+            prototype.dimensions = dimensions;
             prototype.active = true;
 
             prototypes_.push_back(prototype);
@@ -31,8 +33,7 @@ namespace vws
             ObjectType type,
             const std::string &name,
             const std::string &prototype_id,
-            Transform transform,
-            Dimensions dimensions)
+            Transform transform)
         {
             WorldObject object;
             object.id = next_id_++;
@@ -40,12 +41,24 @@ namespace vws
             object.name = name;
             object.prototype_id = prototype_id;
             object.transform = transform;
-            object.dimensions = dimensions;
             object.active = true;
 
             objects_.push_back(object);
 
             return object.id;
+        }
+
+        const Prototype *find_prototype(const std::string &prototype_id) const
+        {
+            for (const auto &prototype : prototypes_)
+            {
+                if (prototype.id == prototype_id)
+                {
+                    return &prototype;
+                }
+            }
+
+            return nullptr;
         }
 
         std::size_t object_count() const

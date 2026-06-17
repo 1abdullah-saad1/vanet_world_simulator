@@ -22,17 +22,27 @@ namespace vws
 
         for (const auto &object : world_.objects())
         {
+            const Prototype *prototype = world_.find_prototype(object.prototype_id);
+
+            Dimensions size{};
+
+            if (prototype != nullptr)
+            {
+                size = prototype->dimensions;
+            }
+
             std::cout
                 << "Object " << object.id
                 << " | " << object_type_to_string(object.type)
                 << " | " << object.name
+                << " | prototype=" << object.prototype_id
                 << " | pos=("
                 << object.transform.position.x << ", "
                 << object.transform.position.y << ")"
                 << " | size=("
-                << object.dimensions.length_m << ", "
-                << object.dimensions.width_m << ", "
-                << object.dimensions.height_m << ")"
+                << size.length_m << ", "
+                << size.width_m << ", "
+                << size.height_m << ")"
                 << std::endl;
         }
 
@@ -50,17 +60,20 @@ namespace vws
         world_.add_prototype(
             "vehicle.prototype.basic",
             ObjectType::Vehicle,
-            "Basic Vehicle Prototype");
+            "Basic Vehicle Prototype",
+            Dimensions{4.5, 1.8, 1.5});
 
         world_.add_prototype(
             "street.prototype.basic",
             ObjectType::Street,
-            "Basic Street Prototype");
+            "Basic Street Prototype",
+            Dimensions{100.0, 7.0, 0.0});
 
         world_.add_prototype(
             "traffic_light.prototype.basic",
             ObjectType::TrafficLight,
-            "Basic Traffic Light Prototype");
+            "Basic Traffic Light Prototype",
+            Dimensions{0.5, 0.5, 3.0});
     }
 
     void Engine::initialize_world()
@@ -69,22 +82,19 @@ namespace vws
             ObjectType::Vehicle,
             "vehicle_001",
             "vehicle.prototype.basic",
-            Transform{Vec2{0.0, 0.0}, 0.0},
-            Dimensions{4.5, 1.8, 1.5});
+            Transform{Vec2{0.0, 0.0}, 0.0});
 
         world_.add_object(
             ObjectType::Street,
             "street_001",
             "street.prototype.basic",
-            Transform{Vec2{0.0, 0.0}, 0.0},
-            Dimensions{100.0, 7.0, 0.0});
+            Transform{Vec2{0.0, 0.0}, 0.0});
 
         world_.add_object(
             ObjectType::TrafficLight,
             "traffic_light_001",
             "traffic_light.prototype.basic",
-            Transform{Vec2{50.0, 0.0}, 0.0},
-            Dimensions{0.5, 0.5, 3.0});
+            Transform{Vec2{50.0, 0.0}, 0.0});
     }
 
     void Engine::tick(std::uint64_t tick_number)
