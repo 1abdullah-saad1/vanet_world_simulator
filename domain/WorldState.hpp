@@ -51,16 +51,18 @@ namespace vws
 
         void add_vehicle_state(
             ObjectId object_id,
+            ObjectId current_street_id,
+            int lane_id,
             double speed_mps,
             double acceleration_mps2,
-            int lane_id,
             double fuel_percent)
         {
             VehicleState state;
             state.object_id = object_id;
+            state.current_street_id = current_street_id;
+            state.lane_id = lane_id;
             state.speed_mps = speed_mps;
             state.acceleration_mps2 = acceleration_mps2;
-            state.lane_id = lane_id;
             state.fuel_percent = fuel_percent;
             state.active = true;
 
@@ -74,6 +76,32 @@ namespace vws
                 if (prototype.id == prototype_id)
                 {
                     return &prototype;
+                }
+            }
+
+            return nullptr;
+        }
+
+        const WorldObject *find_object(ObjectId object_id) const
+        {
+            for (const auto &object : objects_)
+            {
+                if (object.id == object_id)
+                {
+                    return &object;
+                }
+            }
+
+            return nullptr;
+        }
+
+        WorldObject *find_object_mutable(ObjectId object_id)
+        {
+            for (auto &object : objects_)
+            {
+                if (object.id == object_id)
+                {
+                    return &object;
                 }
             }
 

@@ -57,6 +57,7 @@ namespace vws
                     std::cout
                         << "VehicleState"
                         << " | object=" << vehicle_state->object_id
+                        << " | street=" << vehicle_state->current_street_id
                         << " | speed=" << vehicle_state->speed_mps << " m/s"
                         << " | acceleration=" << vehicle_state->acceleration_mps2 << " m/s2"
                         << " | lane=" << vehicle_state->lane_id
@@ -98,6 +99,12 @@ namespace vws
 
     void Engine::initialize_world()
     {
+        const ObjectId street_id = world_.add_object(
+            ObjectType::Street,
+            "street_001",
+            "street.prototype.basic",
+            Transform{Vec2{0.0, 0.0}, 0.0});
+
         const ObjectId vehicle_id = world_.add_object(
             ObjectType::Vehicle,
             "vehicle_001",
@@ -106,16 +113,11 @@ namespace vws
 
         world_.add_vehicle_state(
             vehicle_id,
+            street_id,
+            1,
             10.0,
             1.0,
-            1,
             100.0);
-
-        world_.add_object(
-            ObjectType::Street,
-            "street_001",
-            "street.prototype.basic",
-            Transform{Vec2{0.0, 0.0}, 0.0});
 
         world_.add_object(
             ObjectType::TrafficLight,
@@ -142,12 +144,19 @@ namespace vws
 
                 std::cout
                     << " | " << object.name
-                    << " x=" << object.transform.position.x;
+                    << " street=";
 
                 if (vehicle_state != nullptr)
                 {
                     std::cout
+                        << vehicle_state->current_street_id
+                        << " lane=" << vehicle_state->lane_id
+                        << " x=" << object.transform.position.x
                         << " speed=" << vehicle_state->speed_mps;
+                }
+                else
+                {
+                    std::cout << "none";
                 }
             }
         }
