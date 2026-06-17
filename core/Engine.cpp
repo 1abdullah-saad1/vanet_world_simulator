@@ -180,6 +180,7 @@ namespace vws
                         << vehicle_state->current_street_id
                         << " lane=" << vehicle_state->lane_id
                         << " x=" << object.transform.position.x
+                        << " y=" << object.transform.position.y
                         << " speed=" << vehicle_state->speed_mps;
                 }
                 else

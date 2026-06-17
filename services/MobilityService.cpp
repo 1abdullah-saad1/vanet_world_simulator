@@ -5,6 +5,8 @@ namespace vws
 
     void MobilityService::update(WorldState &world, double delta_time_s)
     {
+        const double lane_width_m = 3.5;
+
         for (auto &vehicle_state : world.vehicle_states_mutable())
         {
             if (!vehicle_state.active)
@@ -27,6 +29,13 @@ namespace vws
             }
 
             vehicle_object->transform.position.x += vehicle_state.speed_mps * delta_time_s;
+
+            // Lane positioning:
+            // lane 1 -> y = 0.0
+            // lane 2 -> y = 3.5
+            // lane 3 -> y = 7.0
+            vehicle_object->transform.position.y =
+                static_cast<double>(vehicle_state.lane_id - 1) * lane_width_m;
 
             const WorldObject *street_object = world.find_object(vehicle_state.current_street_id);
 
