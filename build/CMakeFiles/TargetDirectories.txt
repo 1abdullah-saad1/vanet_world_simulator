@@ -1,3 +1,0 @@
-/home/abdullah/Documents/GitHub/vanet_world_simulator/build/CMakeFiles/vanet_world_simulator.dir
-/home/abdullah/Documents/GitHub/vanet_world_simulator/build/CMakeFiles/edit_cache.dir
-/home/abdullah/Documents/GitHub/vanet_world_simulator/build/CMakeFiles/rebuild_cache.dir
