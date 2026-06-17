@@ -128,6 +128,11 @@ namespace vws
             return vehicle_states_;
         }
 
+        std::vector<VehicleState> &vehicle_states_mutable()
+        {
+            return vehicle_states_;
+        }
+
     private:
         ObjectId next_id_ = 1;
 

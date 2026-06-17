@@ -107,7 +107,7 @@ namespace vws
         world_.add_vehicle_state(
             vehicle_id,
             10.0,
-            0.0,
+            1.0,
             1,
             100.0);
 
@@ -138,9 +138,17 @@ namespace vws
         {
             if (object.type == ObjectType::Vehicle)
             {
+                const VehicleState *vehicle_state = world_.find_vehicle_state(object.id);
+
                 std::cout
                     << " | " << object.name
                     << " x=" << object.transform.position.x;
+
+                if (vehicle_state != nullptr)
+                {
+                    std::cout
+                        << " speed=" << vehicle_state->speed_mps;
+                }
             }
         }
 
