@@ -134,3 +134,10 @@ config/local.yaml
 config/*.local.yaml
 .env
 .env.*
+
+#==========================
+# Build artifacts from package managers
+#==========================
+build/
+logs/*
+!logs/.gitkeep
