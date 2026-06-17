@@ -9,8 +9,10 @@ namespace vws
         : world_{},
           clock_(10.0),
           mobility_{},
-          total_ticks_(120),
-          delta_time_s_(0.1) {}
+          neighbors_{},
+          total_ticks_(5),
+          delta_time_s_(0.1),
+          communication_range_m_(30.0) {}
 
     void Engine::run()
     {
@@ -170,6 +172,11 @@ namespace vws
             {
                 const VehicleState *vehicle_state = world_.find_vehicle_state(object.id);
 
+                const std::size_t neighbor_count = neighbors_.count_neighbors(
+                    world_,
+                    object.id,
+                    communication_range_m_);
+
                 std::cout
                     << " | " << object.name
                     << " street=";
@@ -181,7 +188,8 @@ namespace vws
                         << " lane=" << vehicle_state->lane_id
                         << " x=" << object.transform.position.x
                         << " y=" << object.transform.position.y
-                        << " speed=" << vehicle_state->speed_mps;
+                        << " speed=" << vehicle_state->speed_mps
+                        << " neighbors=" << neighbor_count;
                 }
                 else
                 {
@@ -192,5 +200,4 @@ namespace vws
 
         std::cout << std::endl;
     }
-
 }

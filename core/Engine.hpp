@@ -3,6 +3,7 @@
 #include "domain/WorldState.hpp"
 #include "core/TickClock.hpp"
 #include "services/MobilityService.hpp"
+#include "services/NeighborService.hpp"
 
 #include <cstdint>
 
@@ -24,10 +25,13 @@ namespace vws
     private:
         WorldState world_;
         TickClock clock_;
+
         MobilityService mobility_;
+        NeighborService neighbors_;
 
         std::uint64_t total_ticks_;
         double delta_time_s_;
+        double communication_range_m_;
     };
 
 }

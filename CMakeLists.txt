@@ -11,6 +11,8 @@ add_executable(vanet_world_simulator
     core/Engine.cpp
     core/TickClock.cpp
     services/MobilityService.cpp
+    services/NeighborService.cpp
+
 )
 
 target_include_directories(vanet_world_simulator PRIVATE
