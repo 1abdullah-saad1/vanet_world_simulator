@@ -105,17 +105,45 @@ namespace vws
             "street.prototype.basic",
             Transform{Vec2{0.0, 0.0}, 0.0});
 
-        const ObjectId vehicle_id = world_.add_object(
+        const ObjectId vehicle_001 = world_.add_object(
             ObjectType::Vehicle,
             "vehicle_001",
             "vehicle.prototype.basic",
             Transform{Vec2{0.0, 0.0}, 0.0});
 
         world_.add_vehicle_state(
-            vehicle_id,
+            vehicle_001,
             street_id,
             1,
             10.0,
+            1.0,
+            100.0);
+
+        const ObjectId vehicle_002 = world_.add_object(
+            ObjectType::Vehicle,
+            "vehicle_002",
+            "vehicle.prototype.basic",
+            Transform{Vec2{5.0, 0.0}, 0.0});
+
+        world_.add_vehicle_state(
+            vehicle_002,
+            street_id,
+            2,
+            8.0,
+            1.0,
+            100.0);
+
+        const ObjectId vehicle_003 = world_.add_object(
+            ObjectType::Vehicle,
+            "vehicle_003",
+            "vehicle.prototype.basic",
+            Transform{Vec2{20.0, 0.0}, 0.0});
+
+        world_.add_vehicle_state(
+            vehicle_003,
+            street_id,
+            1,
+            5.0,
             1.0,
             100.0);
 
