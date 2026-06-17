@@ -1,0 +1,3 @@
+prototypes:
+  - name: sedan
+    maxSpeed: 13.9
