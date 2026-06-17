@@ -1,17 +1,10 @@
 #pragma once
 
-#include <vector>
+namespace vws {
 
-#include "domain/Street.hpp"
-#include "domain/TrafficLight.hpp"
-#include "domain/Vehicle.hpp"
+    struct WorldState {
+        // Empty for v0.0.1
+        // Later this will contain vehicles, streets, objects, packets, etc.
+    };
 
-namespace vanet {
-
-struct WorldState {
-    std::vector<Vehicle> vehicles;
-    std::vector<Street> streets;
-    std::vector<TrafficLight> trafficLights;
-};
-
-}  // namespace vanet
+}

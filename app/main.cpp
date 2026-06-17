@@ -1,7 +1,7 @@
 #include "core/Engine.hpp"
 
 int main() {
-    vanet::Engine engine;
-    engine.step();
+    vws::Engine engine;
+    engine.run();
     return 0;
 }

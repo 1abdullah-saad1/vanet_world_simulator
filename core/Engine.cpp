@@ -1,13 +1,27 @@
 #include "core/Engine.hpp"
 
-namespace vanet {
+#include <iostream>
 
-void Engine::step() {
-    mobilityService.update(worldState, clock.current());
-    eventService.update(worldState, clock.current());
-    radioService.update(worldState, clock.current());
-    packetService.update(worldState, clock.current());
-    clock.advance();
+namespace vws {
+
+Engine::Engine()
+    : world_{},
+      clock_(10.0),
+      total_ticks_(5) {}
+
+void Engine::run() {
+    std::cout << "VANET World Simulator started" << std::endl;
+
+    for (std::uint64_t i = 0; i < total_ticks_; ++i) {
+        tick(i);
+        clock_.wait_for_next_tick();
+    }
+
+    std::cout << "Simulation finished" << std::endl;
 }
 
-}  // namespace vanet
+void Engine::tick(std::uint64_t tick_number) {
+    std::cout << "Tick " << tick_number << std::endl;
+}
+
+}

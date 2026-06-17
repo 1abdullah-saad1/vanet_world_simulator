@@ -1,16 +1,18 @@
 #pragma once
 
-#include "domain/Types.hpp"
+#include <chrono>
 
-namespace vanet {
+namespace vws {
 
-class TickClock {
-public:
-    Tick current() const;
-    void advance();
+    class TickClock {
+    public:
+        explicit TickClock(double tick_rate_hz);
+    
+        void wait_for_next_tick();
+    
+    private:
+        std::chrono::duration<double> tick_duration_;
+        std::chrono::steady_clock::time_point next_tick_time_;
+    };
 
-private:
-    Tick tick {0};
-};
-
-}  // namespace vanet
+}

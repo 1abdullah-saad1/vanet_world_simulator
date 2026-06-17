@@ -1,25 +1,26 @@
 #pragma once
 
-#include "core/TickClock.hpp"
 #include "domain/WorldState.hpp"
-#include "services/EventService.hpp"
-#include "services/MobilityService.hpp"
-#include "services/PacketService.hpp"
-#include "services/RadioService.hpp"
+#include "core/TickClock.hpp"
 
-namespace vanet {
+#include <cstdint>
+
+namespace vws {
 
 class Engine {
 public:
-    void step();
+    Engine();
+
+    void run();
 
 private:
-    TickClock clock;
-    WorldState worldState;
-    MobilityService mobilityService;
-    EventService eventService;
-    RadioService radioService;
-    PacketService packetService;
+    void tick(std::uint64_t tick_number);
+
+private:
+    WorldState world_;
+    TickClock clock_;
+
+    std::uint64_t total_ticks_;
 };
 
-}  // namespace vanet
+}
