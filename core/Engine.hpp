@@ -16,6 +16,7 @@ namespace vws
         void run();
 
     private:
+        void initialize_prototypes();
         void initialize_world();
         void tick(std::uint64_t tick_number);
 

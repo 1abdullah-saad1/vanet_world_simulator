@@ -14,8 +14,10 @@ namespace vws
     {
         std::cout << "VANET World Simulator started" << std::endl;
 
+        initialize_prototypes();
         initialize_world();
 
+        std::cout << "Prototypes loaded: " << world_.prototype_count() << std::endl;
         std::cout << "World objects loaded: " << world_.object_count() << std::endl;
 
         for (std::uint64_t i = 0; i < total_ticks_; ++i)
@@ -25,6 +27,24 @@ namespace vws
         }
 
         std::cout << "Simulation finished" << std::endl;
+    }
+
+    void Engine::initialize_prototypes()
+    {
+        world_.add_prototype(
+            "vehicle.prototype.basic",
+            ObjectType::Vehicle,
+            "Basic Vehicle Prototype");
+
+        world_.add_prototype(
+            "street.prototype.basic",
+            ObjectType::Street,
+            "Basic Street Prototype");
+
+        world_.add_prototype(
+            "traffic_light.prototype.basic",
+            ObjectType::TrafficLight,
+            "Basic Traffic Light Prototype");
     }
 
     void Engine::initialize_world()
@@ -50,6 +70,7 @@ namespace vws
         std::cout
             << "Tick " << tick_number
             << " | objects=" << world_.object_count()
+            << " | prototypes=" << world_.prototype_count()
             << std::endl;
     }
 

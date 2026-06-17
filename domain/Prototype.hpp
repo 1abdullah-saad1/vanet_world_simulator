@@ -2,11 +2,18 @@
 
 #include "domain/Types.hpp"
 
-namespace vanet {
+#include <string>
 
-struct Prototype {
-    Name name;
-    double maxSpeed {0.0};
-};
+namespace vws
+{
 
-}  // namespace vanet
+    struct Prototype
+    {
+        std::string id;
+        ObjectType type = ObjectType::Unknown;
+        std::string label;
+
+        bool active = true;
+    };
+
+}
