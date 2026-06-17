@@ -9,7 +9,7 @@ namespace vws
         : world_{},
           clock_(10.0),
           mobility_{},
-          total_ticks_(5),
+          total_ticks_(120),
           delta_time_s_(0.1) {}
 
     void Engine::run()
