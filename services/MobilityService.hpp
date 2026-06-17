@@ -1,13 +1,14 @@
 #pragma once
 
-#include "domain/Types.hpp"
 #include "domain/WorldState.hpp"
 
-namespace vanet {
+namespace vws
+{
 
-class MobilityService {
-public:
-    void update(WorldState& worldState, Tick tick) const;
-};
+    class MobilityService
+    {
+    public:
+        void update(WorldState &world, double delta_time_s);
+    };
 
-}  // namespace vanet
+}

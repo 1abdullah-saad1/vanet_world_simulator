@@ -113,6 +113,11 @@ namespace vws
             return objects_;
         }
 
+        std::vector<WorldObject> &objects_mutable()
+        {
+            return objects_;
+        }
+
         const std::vector<Prototype> &prototypes() const
         {
             return prototypes_;

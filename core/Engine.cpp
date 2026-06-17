@@ -8,7 +8,9 @@ namespace vws
     Engine::Engine()
         : world_{},
           clock_(10.0),
-          total_ticks_(5) {}
+          mobility_{},
+          total_ticks_(5),
+          delta_time_s_(0.1) {}
 
     void Engine::run()
     {
@@ -104,7 +106,7 @@ namespace vws
 
         world_.add_vehicle_state(
             vehicle_id,
-            0.0,
+            10.0,
             0.0,
             1,
             100.0);
@@ -124,12 +126,25 @@ namespace vws
 
     void Engine::tick(std::uint64_t tick_number)
     {
+        mobility_.update(world_, delta_time_s_);
+
         std::cout
             << "Tick " << tick_number
             << " | objects=" << world_.object_count()
             << " | prototypes=" << world_.prototype_count()
-            << " | vehicles=" << world_.vehicle_state_count()
-            << std::endl;
+            << " | vehicles=" << world_.vehicle_state_count();
+
+        for (const auto &object : world_.objects())
+        {
+            if (object.type == ObjectType::Vehicle)
+            {
+                std::cout
+                    << " | " << object.name
+                    << " x=" << object.transform.position.x;
+            }
+        }
+
+        std::cout << std::endl;
     }
 
 }
