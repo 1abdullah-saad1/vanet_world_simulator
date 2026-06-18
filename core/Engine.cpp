@@ -8,7 +8,7 @@ namespace vws
     Engine::Engine()
         : world_{},
           client_registry_{},
-                    alert_service_{},
+          alert_service_{},
           client_health_service_{},
           assignment_service_{},
           experiment_log_service_{},
@@ -31,13 +31,13 @@ namespace vws
           readiness_status_{},
           virtual_client_plan_{},
           experiment_session_status_{},
-                    alert_summary_{},
+          alert_summary_{},
           current_tick_{0},
           total_ticks_{3} {}
 
     void Engine::run()
     {
-                std::cout << "VWS v0.0.17 - Alert Service\n";
+        std::cout << "VWS v0.0.17 - Alert Service\n";
         initialize_constraints();
         initialize_clients();
         initialize_missions();
