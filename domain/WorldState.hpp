@@ -27,8 +27,24 @@ namespace vws
             return clients_;
         }
 
+        void add_mission(const VehicleMission &mission)
+        {
+            missions_.push_back(mission);
+        }
+
+        std::size_t mission_count() const
+        {
+            return missions_.size();
+        }
+
+        const std::vector<VehicleMission> &missions() const
+        {
+            return missions_;
+        }
+
     private:
         std::vector<Client> clients_;
+        std::vector<VehicleMission> missions_;
     };
 
 } // namespace vws
