@@ -8,6 +8,7 @@ namespace vws
     Engine::Engine()
         : world_{},
           client_registry_{},
+                    client_health_service_{},
           assignment_service_{},
           experiment_log_service_{},
           scenario_constraint_service_{},
@@ -17,13 +18,14 @@ namespace vws
           traffic_light_control_service_{},
           traffic_light_service_{},
           virtual_client_planner_{},
+          client_health_summary_{},
           state_validation_summary_{},
           readiness_status_{},
           virtual_client_plan_{} {}
 
     void Engine::run()
     {
-        std::cout << "VWS v0.0.10 - Traffic Light Control Step\n";
+        std::cout << "VWS v0.0.11 - Client Health Monitoring\n";
         initialize_constraints();
         initialize_clients();
         initialize_missions();
@@ -31,6 +33,7 @@ namespace vws
         advance_traffic_light_control();
         collect_state_reports();
         validate_state_reports();
+        evaluate_client_health();
         evaluate_readiness();
         plan_virtual_clients();
         log_experiment_snapshot();
@@ -40,6 +43,7 @@ namespace vws
         print_vehicle_states();
         print_traffic_lights();
         print_state_validation_summary();
+        print_client_health_summary();
         print_readiness_status();
         print_virtual_client_plan();
     }
@@ -79,6 +83,13 @@ namespace vws
     void Engine::validate_state_reports()
     {
         state_validation_summary_ = state_validation_service_.validate(world_);
+    }
+
+    void Engine::evaluate_client_health()
+    {
+        constexpr Tick reference_tick = 1;
+        constexpr Tick max_staleness_ticks = 0;
+        client_health_summary_ = client_health_service_.evaluate(world_, reference_tick, max_staleness_ticks);
     }
 
     void Engine::evaluate_readiness()
@@ -193,6 +204,23 @@ namespace vws
         std::cout << "- total_reports=" << state_validation_summary_.total_reports << "\n";
         std::cout << "- valid_reports=" << state_validation_summary_.valid_reports << "\n";
         std::cout << "- invalid_reports=" << state_validation_summary_.invalid_reports << "\n";
+    }
+
+    void Engine::print_client_health_summary() const
+    {
+        std::cout << "Client health summary (reference_tick=" << client_health_summary_.reference_tick << ")\n";
+        std::cout << "- healthy_clients=" << client_health_summary_.healthy_clients << "\n";
+        std::cout << "- unhealthy_clients=" << client_health_summary_.unhealthy_clients << "\n";
+
+        for (const auto &status : client_health_summary_.statuses)
+        {
+            std::cout << "- client_id=" << status.client_id
+                      << ", name=" << status.client_name
+                      << ", has_report=" << (status.has_report ? "true" : "false")
+                      << ", last_report_tick=" << status.last_report_tick
+                      << ", healthy=" << (status.healthy ? "true" : "false")
+                      << "\n";
+        }
     }
 
     void Engine::print_readiness_status() const

@@ -2,6 +2,7 @@
 
 #include "domain/WorldState.hpp"
 #include "services/AssignmentService.hpp"
+#include "services/ClientHealthService.hpp"
 #include "services/ClientRegistry.hpp"
 #include "services/ExperimentLogService.hpp"
 #include "services/ReadinessService.hpp"
@@ -30,6 +31,7 @@ namespace vws
         void advance_traffic_light_control();
         void collect_state_reports();
         void validate_state_reports();
+        void evaluate_client_health();
         void evaluate_readiness();
         void plan_virtual_clients();
         void log_experiment_snapshot() const;
@@ -39,12 +41,14 @@ namespace vws
         void print_vehicle_states() const;
         void print_traffic_lights() const;
         void print_state_validation_summary() const;
+        void print_client_health_summary() const;
         void print_readiness_status() const;
         void print_virtual_client_plan() const;
 
     private:
         WorldState world_;
         ClientRegistry client_registry_;
+        ClientHealthService client_health_service_;
         AssignmentService assignment_service_;
         ExperimentLogService experiment_log_service_;
         ScenarioConstraintService scenario_constraint_service_;
@@ -54,6 +58,7 @@ namespace vws
         TrafficLightControlService traffic_light_control_service_;
         TrafficLightService traffic_light_service_;
         VirtualClientPlanner virtual_client_planner_;
+        ClientHealthSummary client_health_summary_;
         StateValidationSummary state_validation_summary_;
         ReadinessStatus readiness_status_;
         VirtualClientPlan virtual_client_plan_;
