@@ -12,21 +12,25 @@ namespace vws
           readiness_service_{},
           state_report_service_{},
           traffic_light_service_{},
-          readiness_status_{} {}
+          virtual_client_planner_{},
+          readiness_status_{},
+          virtual_client_plan_{} {}
 
     void Engine::run()
     {
-        std::cout << "VWS v0.0.5 - Experiment Readiness Check\n";
+        std::cout << "VWS v0.0.6 - Virtual Client Provisioning Plan\n";
         initialize_clients();
         initialize_missions();
         initialize_traffic_lights();
         collect_state_reports();
         evaluate_readiness();
+        plan_virtual_clients();
         print_registered_clients();
         print_assigned_missions();
         print_vehicle_states();
         print_traffic_lights();
         print_readiness_status();
+        print_virtual_client_plan();
     }
 
     void Engine::initialize_clients()
@@ -54,6 +58,15 @@ namespace vws
     {
         constexpr std::size_t required_physical_clients = 2;
         readiness_status_ = readiness_service_.evaluate(world_, required_physical_clients);
+    }
+
+    void Engine::plan_virtual_clients()
+    {
+        constexpr std::size_t requested_total_clients = 6;
+        virtual_client_plan_ = virtual_client_planner_.build_plan(
+            readiness_status_,
+            requested_total_clients,
+            world_.client_count());
     }
 
     void Engine::print_registered_clients() const
@@ -122,6 +135,16 @@ namespace vws
         std::cout << "Readiness status: " << (readiness_status_.ready ? "READY" : "NOT_READY") << "\n";
         std::cout << "- required_physical_clients=" << readiness_status_.required_physical_clients << "\n";
         std::cout << "- available_physical_clients=" << readiness_status_.available_physical_clients << "\n";
+    }
+
+    void Engine::print_virtual_client_plan() const
+    {
+        std::cout << "Virtual client plan: "
+                  << (virtual_client_plan_.should_provision ? "PROVISION_NEEDED" : "NO_PROVISION")
+                  << "\n";
+        std::cout << "- requested_total_clients=" << virtual_client_plan_.requested_total_clients << "\n";
+        std::cout << "- current_registered_clients=" << virtual_client_plan_.current_registered_clients << "\n";
+        std::cout << "- needed_virtual_clients=" << virtual_client_plan_.needed_virtual_clients << "\n";
     }
 
 } // namespace vws

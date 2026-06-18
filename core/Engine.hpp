@@ -6,6 +6,7 @@
 #include "services/ReadinessService.hpp"
 #include "services/StateReportService.hpp"
 #include "services/TrafficLightService.hpp"
+#include "services/VirtualClientPlanner.hpp"
 
 namespace vws
 {
@@ -23,11 +24,13 @@ namespace vws
         void initialize_traffic_lights();
         void collect_state_reports();
         void evaluate_readiness();
+        void plan_virtual_clients();
         void print_registered_clients() const;
         void print_assigned_missions() const;
         void print_vehicle_states() const;
         void print_traffic_lights() const;
         void print_readiness_status() const;
+        void print_virtual_client_plan() const;
 
     private:
         WorldState world_;
@@ -36,7 +39,9 @@ namespace vws
         ReadinessService readiness_service_;
         StateReportService state_report_service_;
         TrafficLightService traffic_light_service_;
+        VirtualClientPlanner virtual_client_planner_;
         ReadinessStatus readiness_status_;
+        VirtualClientPlan virtual_client_plan_;
     };
 
 } // namespace vws
