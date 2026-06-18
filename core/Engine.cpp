@@ -11,6 +11,7 @@ namespace vws
           client_health_service_{},
           assignment_service_{},
           experiment_log_service_{},
+          mission_progress_service_{},
           scenario_constraint_service_{},
           readiness_service_{},
           state_report_service_{},
@@ -19,19 +20,21 @@ namespace vws
           traffic_light_service_{},
           virtual_client_planner_{},
           client_health_summary_{},
+          mission_progress_summary_{},
           state_validation_summary_{},
           readiness_status_{},
           virtual_client_plan_{} {}
 
     void Engine::run()
     {
-        std::cout << "VWS v0.0.11 - Client Health Monitoring\n";
+        std::cout << "VWS v0.0.12 - Mission Progress Tracking\n";
         initialize_constraints();
         initialize_clients();
         initialize_missions();
         initialize_traffic_lights();
         advance_traffic_light_control();
         collect_state_reports();
+        evaluate_mission_progress();
         validate_state_reports();
         evaluate_client_health();
         evaluate_readiness();
@@ -40,6 +43,7 @@ namespace vws
         print_scenario_constraints();
         print_registered_clients();
         print_assigned_missions();
+        print_mission_progress_summary();
         print_vehicle_states();
         print_traffic_lights();
         print_state_validation_summary();
@@ -78,6 +82,11 @@ namespace vws
     {
         constexpr Tick initial_tick = 1;
         state_report_service_.submit_demo_state_reports(world_, initial_tick);
+    }
+
+    void Engine::evaluate_mission_progress()
+    {
+        mission_progress_summary_ = mission_progress_service_.evaluate(world_);
     }
 
     void Engine::validate_state_reports()
@@ -161,6 +170,25 @@ namespace vws
                       << ", start_point=" << mission.start_point
                       << ", target_point=" << mission.target_point
                       << ", assigned=" << (mission.assigned ? "true" : "false")
+                      << "\n";
+        }
+    }
+
+    void Engine::print_mission_progress_summary() const
+    {
+        std::cout << "Mission progress summary\n";
+        std::cout << "- total_missions=" << mission_progress_summary_.total_missions << "\n";
+        std::cout << "- reached_missions=" << mission_progress_summary_.reached_missions << "\n";
+        std::cout << "- in_progress_missions=" << mission_progress_summary_.in_progress_missions << "\n";
+
+        for (const auto &entry : mission_progress_summary_.entries)
+        {
+            std::cout << "- vehicle_id=" << entry.vehicle_id
+                      << ", assigned_client_id=" << entry.assigned_client_id
+                      << ", target_point=" << entry.target_point
+                      << ", last_position_label=" << entry.last_position_label
+                      << ", has_state=" << (entry.has_state ? "true" : "false")
+                      << ", reached_target=" << (entry.reached_target ? "true" : "false")
                       << "\n";
         }
     }

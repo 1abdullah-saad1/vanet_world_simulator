@@ -5,6 +5,7 @@
 #include "services/ClientHealthService.hpp"
 #include "services/ClientRegistry.hpp"
 #include "services/ExperimentLogService.hpp"
+#include "services/MissionProgressService.hpp"
 #include "services/ReadinessService.hpp"
 #include "services/ScenarioConstraintService.hpp"
 #include "services/StateReportService.hpp"
@@ -30,6 +31,7 @@ namespace vws
         void initialize_traffic_lights();
         void advance_traffic_light_control();
         void collect_state_reports();
+        void evaluate_mission_progress();
         void validate_state_reports();
         void evaluate_client_health();
         void evaluate_readiness();
@@ -37,6 +39,7 @@ namespace vws
         void log_experiment_snapshot() const;
         void print_registered_clients() const;
         void print_assigned_missions() const;
+        void print_mission_progress_summary() const;
         void print_scenario_constraints() const;
         void print_vehicle_states() const;
         void print_traffic_lights() const;
@@ -51,6 +54,7 @@ namespace vws
         ClientHealthService client_health_service_;
         AssignmentService assignment_service_;
         ExperimentLogService experiment_log_service_;
+        MissionProgressService mission_progress_service_;
         ScenarioConstraintService scenario_constraint_service_;
         ReadinessService readiness_service_;
         StateReportService state_report_service_;
@@ -59,6 +63,7 @@ namespace vws
         TrafficLightService traffic_light_service_;
         VirtualClientPlanner virtual_client_planner_;
         ClientHealthSummary client_health_summary_;
+        MissionProgressSummary mission_progress_summary_;
         StateValidationSummary state_validation_summary_;
         ReadinessStatus readiness_status_;
         VirtualClientPlan virtual_client_plan_;
