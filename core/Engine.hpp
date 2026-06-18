@@ -8,6 +8,7 @@
 #include "services/ScenarioConstraintService.hpp"
 #include "services/StateReportService.hpp"
 #include "services/StateValidationService.hpp"
+#include "services/TrafficLightControlService.hpp"
 #include "services/TrafficLightService.hpp"
 #include "services/VirtualClientPlanner.hpp"
 
@@ -26,6 +27,7 @@ namespace vws
         void initialize_clients();
         void initialize_missions();
         void initialize_traffic_lights();
+        void advance_traffic_light_control();
         void collect_state_reports();
         void validate_state_reports();
         void evaluate_readiness();
@@ -49,6 +51,7 @@ namespace vws
         ReadinessService readiness_service_;
         StateReportService state_report_service_;
         StateValidationService state_validation_service_;
+        TrafficLightControlService traffic_light_control_service_;
         TrafficLightService traffic_light_service_;
         VirtualClientPlanner virtual_client_planner_;
         StateValidationSummary state_validation_summary_;

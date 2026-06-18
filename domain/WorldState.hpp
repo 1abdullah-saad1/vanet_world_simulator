@@ -90,6 +90,11 @@ namespace vws
             return traffic_lights_;
         }
 
+        std::vector<TrafficLightNode> &traffic_lights_mutable()
+        {
+            return traffic_lights_;
+        }
+
         void set_constraints(const ScenarioConstraints &constraints)
         {
             constraints_ = constraints;

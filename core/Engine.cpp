@@ -14,6 +14,7 @@ namespace vws
           readiness_service_{},
           state_report_service_{},
           state_validation_service_{},
+          traffic_light_control_service_{},
           traffic_light_service_{},
           virtual_client_planner_{},
           state_validation_summary_{},
@@ -22,11 +23,12 @@ namespace vws
 
     void Engine::run()
     {
-        std::cout << "VWS v0.0.9 - Scenario Constraints\n";
+        std::cout << "VWS v0.0.10 - Traffic Light Control Step\n";
         initialize_constraints();
         initialize_clients();
         initialize_missions();
         initialize_traffic_lights();
+        advance_traffic_light_control();
         collect_state_reports();
         validate_state_reports();
         evaluate_readiness();
@@ -60,6 +62,12 @@ namespace vws
     void Engine::initialize_traffic_lights()
     {
         traffic_light_service_.register_demo_traffic_lights(world_);
+    }
+
+    void Engine::advance_traffic_light_control()
+    {
+        constexpr std::uint32_t elapsed_seconds = 5;
+        traffic_light_control_service_.apply_control_step(world_, elapsed_seconds);
     }
 
     void Engine::collect_state_reports()
