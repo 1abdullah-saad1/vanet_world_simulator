@@ -3,6 +3,7 @@
 #include "domain/WorldState.hpp"
 #include "services/AssignmentService.hpp"
 #include "services/ClientRegistry.hpp"
+#include "services/ExperimentLogService.hpp"
 #include "services/ReadinessService.hpp"
 #include "services/StateReportService.hpp"
 #include "services/StateValidationService.hpp"
@@ -27,6 +28,7 @@ namespace vws
         void validate_state_reports();
         void evaluate_readiness();
         void plan_virtual_clients();
+        void log_experiment_snapshot() const;
         void print_registered_clients() const;
         void print_assigned_missions() const;
         void print_vehicle_states() const;
@@ -39,6 +41,7 @@ namespace vws
         WorldState world_;
         ClientRegistry client_registry_;
         AssignmentService assignment_service_;
+        ExperimentLogService experiment_log_service_;
         ReadinessService readiness_service_;
         StateReportService state_report_service_;
         StateValidationService state_validation_service_;

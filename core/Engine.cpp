@@ -9,6 +9,7 @@ namespace vws
         : world_{},
           client_registry_{},
           assignment_service_{},
+                    experiment_log_service_{},
           readiness_service_{},
           state_report_service_{},
                     state_validation_service_{},
@@ -20,7 +21,7 @@ namespace vws
 
     void Engine::run()
     {
-        std::cout << "VWS v0.0.7 - State Validation\n";
+        std::cout << "VWS v0.0.8 - Experiment Snapshot Logging\n";
         initialize_clients();
         initialize_missions();
         initialize_traffic_lights();
@@ -28,6 +29,7 @@ namespace vws
         validate_state_reports();
         evaluate_readiness();
         plan_virtual_clients();
+        log_experiment_snapshot();
         print_registered_clients();
         print_assigned_missions();
         print_vehicle_states();
@@ -76,6 +78,16 @@ namespace vws
             readiness_status_,
             requested_total_clients,
             world_.client_count());
+    }
+
+    void Engine::log_experiment_snapshot() const
+    {
+        experiment_log_service_.write_snapshot(
+            world_,
+            state_validation_summary_,
+            readiness_status_,
+            virtual_client_plan_,
+            "logs/experiment_log.csv");
     }
 
     void Engine::print_registered_clients() const
