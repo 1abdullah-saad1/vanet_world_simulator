@@ -5,6 +5,7 @@
 #include "services/ClientRegistry.hpp"
 #include "services/ReadinessService.hpp"
 #include "services/StateReportService.hpp"
+#include "services/StateValidationService.hpp"
 #include "services/TrafficLightService.hpp"
 #include "services/VirtualClientPlanner.hpp"
 
@@ -23,12 +24,14 @@ namespace vws
         void initialize_missions();
         void initialize_traffic_lights();
         void collect_state_reports();
+        void validate_state_reports();
         void evaluate_readiness();
         void plan_virtual_clients();
         void print_registered_clients() const;
         void print_assigned_missions() const;
         void print_vehicle_states() const;
         void print_traffic_lights() const;
+        void print_state_validation_summary() const;
         void print_readiness_status() const;
         void print_virtual_client_plan() const;
 
@@ -38,8 +41,10 @@ namespace vws
         AssignmentService assignment_service_;
         ReadinessService readiness_service_;
         StateReportService state_report_service_;
+        StateValidationService state_validation_service_;
         TrafficLightService traffic_light_service_;
         VirtualClientPlanner virtual_client_planner_;
+        StateValidationSummary state_validation_summary_;
         ReadinessStatus readiness_status_;
         VirtualClientPlan virtual_client_plan_;
     };

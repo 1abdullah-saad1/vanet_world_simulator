@@ -11,24 +11,28 @@ namespace vws
           assignment_service_{},
           readiness_service_{},
           state_report_service_{},
+                    state_validation_service_{},
           traffic_light_service_{},
           virtual_client_planner_{},
+                    state_validation_summary_{},
           readiness_status_{},
           virtual_client_plan_{} {}
 
     void Engine::run()
     {
-        std::cout << "VWS v0.0.6 - Virtual Client Provisioning Plan\n";
+        std::cout << "VWS v0.0.7 - State Validation\n";
         initialize_clients();
         initialize_missions();
         initialize_traffic_lights();
         collect_state_reports();
+        validate_state_reports();
         evaluate_readiness();
         plan_virtual_clients();
         print_registered_clients();
         print_assigned_missions();
         print_vehicle_states();
         print_traffic_lights();
+        print_state_validation_summary();
         print_readiness_status();
         print_virtual_client_plan();
     }
@@ -52,6 +56,11 @@ namespace vws
     {
         constexpr Tick initial_tick = 1;
         state_report_service_.submit_demo_state_reports(world_, initial_tick);
+    }
+
+    void Engine::validate_state_reports()
+    {
+        state_validation_summary_ = state_validation_service_.validate(world_);
     }
 
     void Engine::evaluate_readiness()
@@ -128,6 +137,16 @@ namespace vws
                       << ", phase_seconds_remaining=" << light.phase_seconds_remaining
                       << "\n";
         }
+    }
+
+    void Engine::print_state_validation_summary() const
+    {
+        std::cout << "State validation: "
+                  << (state_validation_summary_.all_valid ? "ALL_VALID" : "HAS_INVALID")
+                  << "\n";
+        std::cout << "- total_reports=" << state_validation_summary_.total_reports << "\n";
+        std::cout << "- valid_reports=" << state_validation_summary_.valid_reports << "\n";
+        std::cout << "- invalid_reports=" << state_validation_summary_.invalid_reports << "\n";
     }
 
     void Engine::print_readiness_status() const
