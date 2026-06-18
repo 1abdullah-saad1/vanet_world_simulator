@@ -2,7 +2,9 @@
 
 #include "domain/Client.hpp"
 #include "domain/VehicleMission.hpp"
+#include "domain/VehicleStateReport.hpp"
 
+#include <algorithm>
 #include <cstddef>
 #include <vector>
 
@@ -42,9 +44,39 @@ namespace vws
             return missions_;
         }
 
+        void upsert_vehicle_state(const VehicleStateReport &report)
+        {
+            const auto it = std::find_if(
+                vehicle_states_.begin(),
+                vehicle_states_.end(),
+                [&](const VehicleStateReport &state)
+                {
+                    return state.vehicle_id == report.vehicle_id;
+                });
+
+            if (it != vehicle_states_.end())
+            {
+                *it = report;
+                return;
+            }
+
+            vehicle_states_.push_back(report);
+        }
+
+        std::size_t vehicle_state_count() const
+        {
+            return vehicle_states_.size();
+        }
+
+        const std::vector<VehicleStateReport> &vehicle_states() const
+        {
+            return vehicle_states_;
+        }
+
     private:
         std::vector<Client> clients_;
         std::vector<VehicleMission> missions_;
+        std::vector<VehicleStateReport> vehicle_states_;
     };
 
 } // namespace vws

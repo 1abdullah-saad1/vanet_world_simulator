@@ -8,6 +8,7 @@ namespace vws
 
     using ClientId = std::uint64_t;
     using VehicleId = std::uint64_t;
+    using Tick = std::uint64_t;
 
     enum class ClientType
     {
