@@ -9,14 +9,14 @@ namespace vws
         : world_{},
           client_registry_{},
           assignment_service_{},
-                    experiment_log_service_{},
-                    scenario_constraint_service_{},
+          experiment_log_service_{},
+          scenario_constraint_service_{},
           readiness_service_{},
           state_report_service_{},
-                    state_validation_service_{},
+          state_validation_service_{},
           traffic_light_service_{},
           virtual_client_planner_{},
-                    state_validation_summary_{},
+          state_validation_summary_{},
           readiness_status_{},
           virtual_client_plan_{} {}
 
