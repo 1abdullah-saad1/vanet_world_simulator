@@ -8,18 +8,21 @@ namespace vws
     Engine::Engine()
         : world_{},
           client_registry_{},
-                    assignment_service_{},
-                    state_report_service_{} {}
+          assignment_service_{},
+          state_report_service_{},
+          traffic_light_service_{} {}
 
     void Engine::run()
     {
-                std::cout << "VWS v0.0.3 - Collected Vehicle State Reports\n";
+        std::cout << "VWS v0.0.4 - Traffic Light Modes\n";
         initialize_clients();
         initialize_missions();
-                collect_state_reports();
+        initialize_traffic_lights();
+        collect_state_reports();
         print_registered_clients();
         print_assigned_missions();
-                print_vehicle_states();
+        print_vehicle_states();
+        print_traffic_lights();
     }
 
     void Engine::initialize_clients()
@@ -30,6 +33,11 @@ namespace vws
     void Engine::initialize_missions()
     {
         assignment_service_.assign_demo_missions(world_);
+    }
+
+    void Engine::initialize_traffic_lights()
+    {
+        traffic_light_service_.register_demo_traffic_lights(world_);
     }
 
     void Engine::collect_state_reports()
@@ -80,6 +88,21 @@ namespace vws
                       << ", position_label=" << state.position_label
                       << ", speed_mps=" << state.speed_mps
                       << ", valid=" << (state.valid ? "true" : "false")
+                      << "\n";
+        }
+    }
+
+    void Engine::print_traffic_lights() const
+    {
+        std::cout << "Managed traffic lights: " << world_.traffic_light_count() << "\n";
+
+        for (const auto &light : world_.traffic_lights())
+        {
+            std::cout << "- id=" << light.id
+                      << ", name=" << light.name
+                      << ", mode=" << traffic_light_mode_to_string(light.mode)
+                      << ", phase=" << traffic_light_phase_to_string(light.phase)
+                      << ", phase_seconds_remaining=" << light.phase_seconds_remaining
                       << "\n";
         }
     }

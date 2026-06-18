@@ -18,6 +18,20 @@ namespace vws
         LocalProcess
     };
 
+    enum class TrafficLightControlMode
+    {
+        TimerBased,
+        SensorBased,
+        CentralCloudControlled
+    };
+
+    enum class TrafficLightPhase
+    {
+        Red,
+        Yellow,
+        Green
+    };
+
     inline std::string client_type_to_string(ClientType type)
     {
         switch (type)
@@ -30,6 +44,36 @@ namespace vws
             return "LocalProcess";
         default:
             return "Unknown";
+        }
+    }
+
+    inline std::string traffic_light_mode_to_string(TrafficLightControlMode mode)
+    {
+        switch (mode)
+        {
+        case TrafficLightControlMode::TimerBased:
+            return "TimerBased";
+        case TrafficLightControlMode::SensorBased:
+            return "SensorBased";
+        case TrafficLightControlMode::CentralCloudControlled:
+            return "CentralCloudControlled";
+        default:
+            return "UnknownMode";
+        }
+    }
+
+    inline std::string traffic_light_phase_to_string(TrafficLightPhase phase)
+    {
+        switch (phase)
+        {
+        case TrafficLightPhase::Red:
+            return "Red";
+        case TrafficLightPhase::Yellow:
+            return "Yellow";
+        case TrafficLightPhase::Green:
+            return "Green";
+        default:
+            return "UnknownPhase";
         }
     }
 

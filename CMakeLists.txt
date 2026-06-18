@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(vanet_world_simulator VERSION 0.0.3 LANGUAGES CXX)
+project(vanet_world_simulator VERSION 0.0.4 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -12,6 +12,7 @@ add_executable(vanet_world_simulator
     services/ClientRegistry.cpp
     services/AssignmentService.cpp
     services/StateReportService.cpp
+    services/TrafficLightService.cpp
 )
 
 target_include_directories(vanet_world_simulator PRIVATE

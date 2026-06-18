@@ -1,6 +1,7 @@
 #pragma once
 
 #include "domain/Client.hpp"
+#include "domain/TrafficLightNode.hpp"
 #include "domain/VehicleMission.hpp"
 #include "domain/VehicleStateReport.hpp"
 
@@ -73,10 +74,26 @@ namespace vws
             return vehicle_states_;
         }
 
+        void add_traffic_light(const TrafficLightNode &node)
+        {
+            traffic_lights_.push_back(node);
+        }
+
+        std::size_t traffic_light_count() const
+        {
+            return traffic_lights_.size();
+        }
+
+        const std::vector<TrafficLightNode> &traffic_lights() const
+        {
+            return traffic_lights_;
+        }
+
     private:
         std::vector<Client> clients_;
         std::vector<VehicleMission> missions_;
         std::vector<VehicleStateReport> vehicle_states_;
+        std::vector<TrafficLightNode> traffic_lights_;
     };
 
 } // namespace vws
