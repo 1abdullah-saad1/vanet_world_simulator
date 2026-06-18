@@ -10,6 +10,7 @@
 #include "services/ReadinessService.hpp"
 #include "services/ScenarioConstraintService.hpp"
 #include "services/SessionLifecycleService.hpp"
+#include "services/SpeedPolicyService.hpp"
 #include "services/StateReportService.hpp"
 #include "services/StateValidationService.hpp"
 #include "services/TrafficLightControlService.hpp"
@@ -37,6 +38,7 @@ namespace vws
         void collect_packet_events(Tick tick);
         void evaluate_mission_progress();
         void validate_state_reports();
+        void evaluate_speed_policy();
         void evaluate_client_health();
         void evaluate_readiness();
         void plan_virtual_clients();
@@ -50,6 +52,7 @@ namespace vws
         void print_vehicle_states() const;
         void print_traffic_lights() const;
         void print_state_validation_summary() const;
+        void print_speed_policy_summary() const;
         void print_client_health_summary() const;
         void print_tick_execution_summary() const;
         void print_readiness_status() const;
@@ -66,6 +69,7 @@ namespace vws
         PacketLedgerService packet_ledger_service_;
         ScenarioConstraintService scenario_constraint_service_;
         SessionLifecycleService session_lifecycle_service_;
+        SpeedPolicyService speed_policy_service_;
         ReadinessService readiness_service_;
         StateReportService state_report_service_;
         StateValidationService state_validation_service_;
@@ -76,6 +80,7 @@ namespace vws
         MissionProgressSummary mission_progress_summary_;
         PacketLedgerSummary packet_ledger_summary_;
         StateValidationSummary state_validation_summary_;
+        SpeedPolicySummary speed_policy_summary_;
         ReadinessStatus readiness_status_;
         VirtualClientPlan virtual_client_plan_;
         ExperimentSessionStatus experiment_session_status_;

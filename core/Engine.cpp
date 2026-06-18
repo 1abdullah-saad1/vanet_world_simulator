@@ -12,6 +12,7 @@ namespace vws
           assignment_service_{},
           experiment_log_service_{},
           mission_progress_service_{},
+         speed_policy_service_{},
           packet_ledger_service_{},
           scenario_constraint_service_{},
           session_lifecycle_service_{},
@@ -22,6 +23,7 @@ namespace vws
           traffic_light_service_{},
           virtual_client_planner_{},
           client_health_summary_{},
+         speed_policy_summary_{},
           mission_progress_summary_{},
           packet_ledger_summary_{},
           state_validation_summary_{},
@@ -33,7 +35,7 @@ namespace vws
 
     void Engine::run()
     {
-        std::cout << "VWS v0.0.15 - Session Lifecycle\n";
+        std::cout << "VWS v0.0.16 - Speed Policy Enforcement\n";
         initialize_constraints();
         initialize_clients();
         initialize_missions();
@@ -41,7 +43,8 @@ namespace vws
         run_tick_cycle();
         evaluate_mission_progress();
         validate_state_reports();
-        evaluate_client_health();
+            evaluate_speed_policy();
+            evaluate_client_health();
         evaluate_readiness();
         plan_virtual_clients();
         evaluate_session_lifecycle();
@@ -54,7 +57,8 @@ namespace vws
         print_vehicle_states();
         print_traffic_lights();
         print_state_validation_summary();
-        print_client_health_summary();
+            print_speed_policy_summary();
+            print_client_health_summary();
         print_tick_execution_summary();
         print_readiness_status();
         print_virtual_client_plan();
@@ -117,6 +121,13 @@ namespace vws
     void Engine::validate_state_reports()
     {
         state_validation_summary_ = state_validation_service_.validate(world_);
+    }
+
+    void Engine::evaluate_speed_policy()
+    {
+        const double max_allowed_speed_mps =
+            world_.has_constraints() ? world_.constraints().max_allowed_speed_mps : 20.0;
+        speed_policy_summary_ = speed_policy_service_.evaluate(world_, max_allowed_speed_mps);
     }
 
     void Engine::evaluate_client_health()
@@ -285,6 +296,15 @@ namespace vws
         std::cout << "- total_reports=" << state_validation_summary_.total_reports << "\n";
         std::cout << "- valid_reports=" << state_validation_summary_.valid_reports << "\n";
         std::cout << "- invalid_reports=" << state_validation_summary_.invalid_reports << "\n";
+    }
+
+    void Engine::print_speed_policy_summary() const
+    {
+        std::cout << "Speed policy summary\n";
+        std::cout << "- max_allowed_speed_mps=" << speed_policy_summary_.max_allowed_speed_mps << "\n";
+        std::cout << "- checked_reports=" << speed_policy_summary_.checked_reports << "\n";
+        std::cout << "- violations=" << speed_policy_summary_.violations << "\n";
+        std::cout << "- compliant=" << (speed_policy_summary_.compliant ? "true" : "false") << "\n";
     }
 
     void Engine::print_client_health_summary() const
