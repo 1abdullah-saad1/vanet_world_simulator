@@ -8,7 +8,7 @@ namespace vws
     Engine::Engine()
         : world_{},
           client_registry_{},
-                    client_health_service_{},
+          client_health_service_{},
           assignment_service_{},
           experiment_log_service_{},
           scenario_constraint_service_{},
