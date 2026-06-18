@@ -12,7 +12,7 @@ namespace vws
           assignment_service_{},
           experiment_log_service_{},
           mission_progress_service_{},
-         speed_policy_service_{},
+          speed_policy_service_{},
           packet_ledger_service_{},
           scenario_constraint_service_{},
           session_lifecycle_service_{},
@@ -23,7 +23,7 @@ namespace vws
           traffic_light_service_{},
           virtual_client_planner_{},
           client_health_summary_{},
-         speed_policy_summary_{},
+          speed_policy_summary_{},
           mission_progress_summary_{},
           packet_ledger_summary_{},
           state_validation_summary_{},
@@ -43,8 +43,8 @@ namespace vws
         run_tick_cycle();
         evaluate_mission_progress();
         validate_state_reports();
-            evaluate_speed_policy();
-            evaluate_client_health();
+        evaluate_speed_policy();
+        evaluate_client_health();
         evaluate_readiness();
         plan_virtual_clients();
         evaluate_session_lifecycle();
@@ -57,8 +57,8 @@ namespace vws
         print_vehicle_states();
         print_traffic_lights();
         print_state_validation_summary();
-            print_speed_policy_summary();
-            print_client_health_summary();
+        print_speed_policy_summary();
+        print_client_health_summary();
         print_tick_execution_summary();
         print_readiness_status();
         print_virtual_client_plan();
