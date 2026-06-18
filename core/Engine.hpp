@@ -2,6 +2,7 @@
 
 #include "domain/WorldState.hpp"
 #include "services/AssignmentService.hpp"
+#include "services/AlertService.hpp"
 #include "services/ClientHealthService.hpp"
 #include "services/ClientRegistry.hpp"
 #include "services/ExperimentLogService.hpp"
@@ -43,6 +44,7 @@ namespace vws
         void evaluate_readiness();
         void plan_virtual_clients();
         void evaluate_session_lifecycle();
+        void evaluate_alerts();
         void log_experiment_snapshot() const;
         void print_registered_clients() const;
         void print_assigned_missions() const;
@@ -58,10 +60,12 @@ namespace vws
         void print_readiness_status() const;
         void print_virtual_client_plan() const;
         void print_session_status() const;
+        void print_alert_summary() const;
 
     private:
         WorldState world_;
         ClientRegistry client_registry_;
+        AlertService alert_service_;
         ClientHealthService client_health_service_;
         AssignmentService assignment_service_;
         ExperimentLogService experiment_log_service_;
@@ -84,6 +88,7 @@ namespace vws
         ReadinessStatus readiness_status_;
         VirtualClientPlan virtual_client_plan_;
         ExperimentSessionStatus experiment_session_status_;
+        AlertSummary alert_summary_;
         Tick current_tick_ = 0;
         Tick total_ticks_ = 3;
     };

@@ -8,6 +8,7 @@ namespace vws
     Engine::Engine()
         : world_{},
           client_registry_{},
+                    alert_service_{},
           client_health_service_{},
           assignment_service_{},
           experiment_log_service_{},
@@ -30,12 +31,13 @@ namespace vws
           readiness_status_{},
           virtual_client_plan_{},
           experiment_session_status_{},
+                    alert_summary_{},
           current_tick_{0},
           total_ticks_{3} {}
 
     void Engine::run()
     {
-        std::cout << "VWS v0.0.16 - Speed Policy Enforcement\n";
+                std::cout << "VWS v0.0.17 - Alert Service\n";
         initialize_constraints();
         initialize_clients();
         initialize_missions();
@@ -48,6 +50,7 @@ namespace vws
         evaluate_readiness();
         plan_virtual_clients();
         evaluate_session_lifecycle();
+        evaluate_alerts();
         log_experiment_snapshot();
         print_scenario_constraints();
         print_registered_clients();
@@ -63,6 +66,7 @@ namespace vws
         print_readiness_status();
         print_virtual_client_plan();
         print_session_status();
+        print_alert_summary();
     }
 
     void Engine::initialize_constraints()
@@ -161,6 +165,16 @@ namespace vws
             mission_progress_summary_,
             current_tick_,
             total_ticks_);
+    }
+
+    void Engine::evaluate_alerts()
+    {
+        alert_summary_ = alert_service_.evaluate(
+            state_validation_summary_,
+            speed_policy_summary_,
+            client_health_summary_,
+            readiness_status_,
+            experiment_session_status_);
     }
 
     void Engine::log_experiment_snapshot() const
@@ -360,6 +374,23 @@ namespace vws
         std::cout << "- missions_completed="
                   << (experiment_session_status_.missions_completed ? "true" : "false")
                   << "\n";
+    }
+
+    void Engine::print_alert_summary() const
+    {
+        std::cout << "Alert summary\n";
+        std::cout << "- total_alerts=" << alert_summary_.total_alerts << "\n";
+        std::cout << "- info_alerts=" << alert_summary_.info_alerts << "\n";
+        std::cout << "- warning_alerts=" << alert_summary_.warning_alerts << "\n";
+        std::cout << "- critical_alerts=" << alert_summary_.critical_alerts << "\n";
+
+        for (const auto &record : alert_summary_.records)
+        {
+            std::cout << "- code=" << record.code
+                      << ", severity=" << alert_severity_to_string(record.severity)
+                      << ", message=" << record.message
+                      << "\n";
+        }
     }
 
 } // namespace vws
