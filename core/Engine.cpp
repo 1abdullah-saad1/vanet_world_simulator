@@ -14,6 +14,7 @@ namespace vws
           mission_progress_service_{},
           packet_ledger_service_{},
           scenario_constraint_service_{},
+          session_lifecycle_service_{},
           readiness_service_{},
           state_report_service_{},
           state_validation_service_{},
@@ -26,12 +27,13 @@ namespace vws
           state_validation_summary_{},
           readiness_status_{},
           virtual_client_plan_{},
+          experiment_session_status_{},
           current_tick_{0},
           total_ticks_{3} {}
 
     void Engine::run()
     {
-        std::cout << "VWS v0.0.14 - Tick Orchestration Cycle\n";
+        std::cout << "VWS v0.0.15 - Session Lifecycle\n";
         initialize_constraints();
         initialize_clients();
         initialize_missions();
@@ -42,6 +44,7 @@ namespace vws
         evaluate_client_health();
         evaluate_readiness();
         plan_virtual_clients();
+        evaluate_session_lifecycle();
         log_experiment_snapshot();
         print_scenario_constraints();
         print_registered_clients();
@@ -55,6 +58,7 @@ namespace vws
         print_tick_execution_summary();
         print_readiness_status();
         print_virtual_client_plan();
+        print_session_status();
     }
 
     void Engine::initialize_constraints()
@@ -137,6 +141,15 @@ namespace vws
             readiness_status_,
             requested_total_clients,
             world_.client_count());
+    }
+
+    void Engine::evaluate_session_lifecycle()
+    {
+        experiment_session_status_ = session_lifecycle_service_.evaluate(
+            readiness_status_,
+            mission_progress_summary_,
+            current_tick_,
+            total_ticks_);
     }
 
     void Engine::log_experiment_snapshot() const
@@ -313,6 +326,20 @@ namespace vws
         std::cout << "- requested_total_clients=" << virtual_client_plan_.requested_total_clients << "\n";
         std::cout << "- current_registered_clients=" << virtual_client_plan_.current_registered_clients << "\n";
         std::cout << "- needed_virtual_clients=" << virtual_client_plan_.needed_virtual_clients << "\n";
+    }
+
+    void Engine::print_session_status() const
+    {
+        std::cout << "Experiment session status\n";
+        std::cout << "- state=" << experiment_session_state_to_string(experiment_session_status_.state) << "\n";
+        std::cout << "- current_tick=" << experiment_session_status_.current_tick << "\n";
+        std::cout << "- planned_ticks=" << experiment_session_status_.planned_ticks << "\n";
+        std::cout << "- readiness_gate_passed="
+                  << (experiment_session_status_.readiness_gate_passed ? "true" : "false")
+                  << "\n";
+        std::cout << "- missions_completed="
+                  << (experiment_session_status_.missions_completed ? "true" : "false")
+                  << "\n";
     }
 
 } // namespace vws

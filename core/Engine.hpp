@@ -9,6 +9,7 @@
 #include "services/PacketLedgerService.hpp"
 #include "services/ReadinessService.hpp"
 #include "services/ScenarioConstraintService.hpp"
+#include "services/SessionLifecycleService.hpp"
 #include "services/StateReportService.hpp"
 #include "services/StateValidationService.hpp"
 #include "services/TrafficLightControlService.hpp"
@@ -39,6 +40,7 @@ namespace vws
         void evaluate_client_health();
         void evaluate_readiness();
         void plan_virtual_clients();
+        void evaluate_session_lifecycle();
         void log_experiment_snapshot() const;
         void print_registered_clients() const;
         void print_assigned_missions() const;
@@ -52,6 +54,7 @@ namespace vws
         void print_tick_execution_summary() const;
         void print_readiness_status() const;
         void print_virtual_client_plan() const;
+        void print_session_status() const;
 
     private:
         WorldState world_;
@@ -62,6 +65,7 @@ namespace vws
         MissionProgressService mission_progress_service_;
         PacketLedgerService packet_ledger_service_;
         ScenarioConstraintService scenario_constraint_service_;
+        SessionLifecycleService session_lifecycle_service_;
         ReadinessService readiness_service_;
         StateReportService state_report_service_;
         StateValidationService state_validation_service_;
@@ -74,6 +78,7 @@ namespace vws
         StateValidationSummary state_validation_summary_;
         ReadinessStatus readiness_status_;
         VirtualClientPlan virtual_client_plan_;
+        ExperimentSessionStatus experiment_session_status_;
         Tick current_tick_ = 0;
         Tick total_ticks_ = 3;
     };

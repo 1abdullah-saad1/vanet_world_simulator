@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(vanet_world_simulator VERSION 0.0.14 LANGUAGES CXX)
+project(vanet_world_simulator VERSION 0.0.15 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -22,6 +22,7 @@ add_executable(vanet_world_simulator
     services/ClientHealthService.cpp
     services/MissionProgressService.cpp
     services/PacketLedgerService.cpp
+    services/SessionLifecycleService.cpp
 )
 
 target_include_directories(vanet_world_simulator PRIVATE
