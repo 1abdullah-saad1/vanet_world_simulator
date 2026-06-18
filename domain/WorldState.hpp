@@ -1,17 +1,34 @@
 #pragma once
 
+#include "domain/Client.hpp"
+#include "domain/VehicleMission.hpp"
+
+#include <cstddef>
 #include <vector>
 
-#include "domain/Street.hpp"
-#include "domain/TrafficLight.hpp"
-#include "domain/Vehicle.hpp"
+namespace vws
+{
 
-namespace vanet {
+    class WorldState
+    {
+    public:
+        void add_client(const Client &client)
+        {
+            clients_.push_back(client);
+        }
 
-struct WorldState {
-    std::vector<Vehicle> vehicles;
-    std::vector<Street> streets;
-    std::vector<TrafficLight> trafficLights;
-};
+        std::size_t client_count() const
+        {
+            return clients_.size();
+        }
 
-}  // namespace vanet
+        const std::vector<Client> &clients() const
+        {
+            return clients_;
+        }
+
+    private:
+        std::vector<Client> clients_;
+    };
+
+} // namespace vws

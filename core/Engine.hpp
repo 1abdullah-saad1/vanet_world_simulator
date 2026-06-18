@@ -1,25 +1,25 @@
 #pragma once
 
-#include "core/TickClock.hpp"
 #include "domain/WorldState.hpp"
-#include "services/EventService.hpp"
-#include "services/MobilityService.hpp"
-#include "services/PacketService.hpp"
-#include "services/RadioService.hpp"
+#include "services/ClientRegistry.hpp"
 
-namespace vanet {
+namespace vws
+{
 
-class Engine {
-public:
-    void step();
+    class Engine
+    {
+    public:
+        Engine();
 
-private:
-    TickClock clock;
-    WorldState worldState;
-    MobilityService mobilityService;
-    EventService eventService;
-    RadioService radioService;
-    PacketService packetService;
-};
+        void run();
 
-}  // namespace vanet
+    private:
+        void initialize_clients();
+        void print_registered_clients() const;
+
+    private:
+        WorldState world_;
+        ClientRegistry client_registry_;
+    };
+
+} // namespace vws
