@@ -9,24 +9,24 @@ namespace vws
         : world_{},
           client_registry_{},
           assignment_service_{},
-                    readiness_service_{},
+          readiness_service_{},
           state_report_service_{},
-                    traffic_light_service_{},
-                    readiness_status_{} {}
+          traffic_light_service_{},
+          readiness_status_{} {}
 
     void Engine::run()
     {
-                std::cout << "VWS v0.0.5 - Experiment Readiness Check\n";
+        std::cout << "VWS v0.0.5 - Experiment Readiness Check\n";
         initialize_clients();
         initialize_missions();
         initialize_traffic_lights();
         collect_state_reports();
-                evaluate_readiness();
+        evaluate_readiness();
         print_registered_clients();
         print_assigned_missions();
         print_vehicle_states();
         print_traffic_lights();
-                print_readiness_status();
+        print_readiness_status();
     }
 
     void Engine::initialize_clients()
