@@ -9,20 +9,24 @@ namespace vws
         : world_{},
           client_registry_{},
           assignment_service_{},
+                    readiness_service_{},
           state_report_service_{},
-          traffic_light_service_{} {}
+                    traffic_light_service_{},
+                    readiness_status_{} {}
 
     void Engine::run()
     {
-        std::cout << "VWS v0.0.4 - Traffic Light Modes\n";
+                std::cout << "VWS v0.0.5 - Experiment Readiness Check\n";
         initialize_clients();
         initialize_missions();
         initialize_traffic_lights();
         collect_state_reports();
+                evaluate_readiness();
         print_registered_clients();
         print_assigned_missions();
         print_vehicle_states();
         print_traffic_lights();
+                print_readiness_status();
     }
 
     void Engine::initialize_clients()
@@ -44,6 +48,12 @@ namespace vws
     {
         constexpr Tick initial_tick = 1;
         state_report_service_.submit_demo_state_reports(world_, initial_tick);
+    }
+
+    void Engine::evaluate_readiness()
+    {
+        constexpr std::size_t required_physical_clients = 2;
+        readiness_status_ = readiness_service_.evaluate(world_, required_physical_clients);
     }
 
     void Engine::print_registered_clients() const
@@ -105,6 +115,13 @@ namespace vws
                       << ", phase_seconds_remaining=" << light.phase_seconds_remaining
                       << "\n";
         }
+    }
+
+    void Engine::print_readiness_status() const
+    {
+        std::cout << "Readiness status: " << (readiness_status_.ready ? "READY" : "NOT_READY") << "\n";
+        std::cout << "- required_physical_clients=" << readiness_status_.required_physical_clients << "\n";
+        std::cout << "- available_physical_clients=" << readiness_status_.available_physical_clients << "\n";
     }
 
 } // namespace vws
