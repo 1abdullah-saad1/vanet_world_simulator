@@ -12,6 +12,7 @@ namespace vws
           assignment_service_{},
           experiment_log_service_{},
           mission_progress_service_{},
+          packet_ledger_service_{},
           scenario_constraint_service_{},
           readiness_service_{},
           state_report_service_{},
@@ -21,19 +22,21 @@ namespace vws
           virtual_client_planner_{},
           client_health_summary_{},
           mission_progress_summary_{},
+          packet_ledger_summary_{},
           state_validation_summary_{},
           readiness_status_{},
           virtual_client_plan_{} {}
 
     void Engine::run()
     {
-        std::cout << "VWS v0.0.12 - Mission Progress Tracking\n";
+        std::cout << "VWS v0.0.13 - Packet Ledger Tracking\n";
         initialize_constraints();
         initialize_clients();
         initialize_missions();
         initialize_traffic_lights();
         advance_traffic_light_control();
         collect_state_reports();
+        collect_packet_events();
         evaluate_mission_progress();
         validate_state_reports();
         evaluate_client_health();
@@ -44,6 +47,7 @@ namespace vws
         print_registered_clients();
         print_assigned_missions();
         print_mission_progress_summary();
+        print_packet_ledger_summary();
         print_vehicle_states();
         print_traffic_lights();
         print_state_validation_summary();
@@ -82,6 +86,13 @@ namespace vws
     {
         constexpr Tick initial_tick = 1;
         state_report_service_.submit_demo_state_reports(world_, initial_tick);
+    }
+
+    void Engine::collect_packet_events()
+    {
+        constexpr Tick packet_tick = 1;
+        packet_ledger_service_.generate_demo_packet_events(world_, packet_tick);
+        packet_ledger_summary_ = packet_ledger_service_.summarize(world_);
     }
 
     void Engine::evaluate_mission_progress()
@@ -189,6 +200,25 @@ namespace vws
                       << ", last_position_label=" << entry.last_position_label
                       << ", has_state=" << (entry.has_state ? "true" : "false")
                       << ", reached_target=" << (entry.reached_target ? "true" : "false")
+                      << "\n";
+        }
+    }
+
+    void Engine::print_packet_ledger_summary() const
+    {
+        std::cout << "Packet ledger summary\n";
+        std::cout << "- total_packets=" << packet_ledger_summary_.total_packets << "\n";
+        std::cout << "- uplink_packets=" << packet_ledger_summary_.uplink_packets << "\n";
+        std::cout << "- downlink_packets=" << packet_ledger_summary_.downlink_packets << "\n";
+
+        for (const auto &record : world_.packet_records())
+        {
+            std::cout << "- packet_id=" << record.packet_id
+                      << ", vehicle_id=" << record.vehicle_id
+                      << ", client_id=" << record.client_id
+                      << ", tick=" << record.tick
+                      << ", direction=" << packet_direction_to_string(record.direction)
+                      << ", topic=" << record.topic
                       << "\n";
         }
     }

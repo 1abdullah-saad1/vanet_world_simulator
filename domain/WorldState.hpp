@@ -1,6 +1,7 @@
 #pragma once
 
 #include "domain/Client.hpp"
+#include "domain/PacketRecord.hpp"
 #include "domain/ScenarioConstraints.hpp"
 #include "domain/TrafficLightNode.hpp"
 #include "domain/VehicleMission.hpp"
@@ -111,11 +112,27 @@ namespace vws
             return constraints_;
         }
 
+        void add_packet_record(const PacketRecord &record)
+        {
+            packet_records_.push_back(record);
+        }
+
+        std::size_t packet_record_count() const
+        {
+            return packet_records_.size();
+        }
+
+        const std::vector<PacketRecord> &packet_records() const
+        {
+            return packet_records_;
+        }
+
     private:
         std::vector<Client> clients_;
         std::vector<VehicleMission> missions_;
         std::vector<VehicleStateReport> vehicle_states_;
         std::vector<TrafficLightNode> traffic_lights_;
+        std::vector<PacketRecord> packet_records_;
         ScenarioConstraints constraints_;
         bool has_constraints_ = false;
     };
