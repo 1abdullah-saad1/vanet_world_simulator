@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(vanet_world_simulator VERSION 0.0.8 LANGUAGES CXX)
+project(vanet_world_simulator VERSION 0.0.9 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -17,6 +17,7 @@ add_executable(vanet_world_simulator
     services/VirtualClientPlanner.cpp
     services/StateValidationService.cpp
     services/ExperimentLogService.cpp
+    services/ScenarioConstraintService.cpp
 )
 
 target_include_directories(vanet_world_simulator PRIVATE

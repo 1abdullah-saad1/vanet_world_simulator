@@ -20,10 +20,13 @@ namespace vws
 
         if (output.tellp() == 0)
         {
-            output << "clients,missions,vehicle_states,traffic_lights,valid_reports,invalid_reports,readiness,needed_virtual_clients\n";
+            output << "scenario,clients,missions,vehicle_states,traffic_lights,valid_reports,invalid_reports,readiness,needed_virtual_clients\n";
         }
 
-        output << world.client_count() << ","
+        const std::string scenario_name = world.has_constraints() ? world.constraints().scenario_name : "unset";
+
+        output << scenario_name << ","
+               << world.client_count() << ","
                << world.mission_count() << ","
                << world.vehicle_state_count() << ","
                << world.traffic_light_count() << ","

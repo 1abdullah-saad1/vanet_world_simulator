@@ -10,6 +10,7 @@ namespace vws
           client_registry_{},
           assignment_service_{},
                     experiment_log_service_{},
+                    scenario_constraint_service_{},
           readiness_service_{},
           state_report_service_{},
                     state_validation_service_{},
@@ -21,7 +22,8 @@ namespace vws
 
     void Engine::run()
     {
-        std::cout << "VWS v0.0.8 - Experiment Snapshot Logging\n";
+        std::cout << "VWS v0.0.9 - Scenario Constraints\n";
+        initialize_constraints();
         initialize_clients();
         initialize_missions();
         initialize_traffic_lights();
@@ -30,6 +32,7 @@ namespace vws
         evaluate_readiness();
         plan_virtual_clients();
         log_experiment_snapshot();
+        print_scenario_constraints();
         print_registered_clients();
         print_assigned_missions();
         print_vehicle_states();
@@ -37,6 +40,11 @@ namespace vws
         print_state_validation_summary();
         print_readiness_status();
         print_virtual_client_plan();
+    }
+
+    void Engine::initialize_constraints()
+    {
+        scenario_constraint_service_.apply_demo_constraints(world_);
     }
 
     void Engine::initialize_clients()
@@ -67,13 +75,15 @@ namespace vws
 
     void Engine::evaluate_readiness()
     {
-        constexpr std::size_t required_physical_clients = 2;
+        const std::size_t required_physical_clients =
+            world_.has_constraints() ? world_.constraints().min_required_physical_clients : 2;
         readiness_status_ = readiness_service_.evaluate(world_, required_physical_clients);
     }
 
     void Engine::plan_virtual_clients()
     {
-        constexpr std::size_t requested_total_clients = 6;
+        const std::size_t requested_total_clients =
+            world_.has_constraints() ? world_.constraints().target_total_clients : 6;
         virtual_client_plan_ = virtual_client_planner_.build_plan(
             readiness_status_,
             requested_total_clients,
@@ -88,6 +98,22 @@ namespace vws
             readiness_status_,
             virtual_client_plan_,
             "logs/experiment_log.csv");
+    }
+
+    void Engine::print_scenario_constraints() const
+    {
+        if (!world_.has_constraints())
+        {
+            std::cout << "Scenario constraints: UNSET\n";
+            return;
+        }
+
+        const auto &constraints = world_.constraints();
+        std::cout << "Scenario constraints: " << constraints.scenario_name << "\n";
+        std::cout << "- tick_interval_ms=" << constraints.tick_interval_ms << "\n";
+        std::cout << "- max_allowed_speed_mps=" << constraints.max_allowed_speed_mps << "\n";
+        std::cout << "- min_required_physical_clients=" << constraints.min_required_physical_clients << "\n";
+        std::cout << "- target_total_clients=" << constraints.target_total_clients << "\n";
     }
 
     void Engine::print_registered_clients() const

@@ -5,6 +5,7 @@
 #include "services/ClientRegistry.hpp"
 #include "services/ExperimentLogService.hpp"
 #include "services/ReadinessService.hpp"
+#include "services/ScenarioConstraintService.hpp"
 #include "services/StateReportService.hpp"
 #include "services/StateValidationService.hpp"
 #include "services/TrafficLightService.hpp"
@@ -21,6 +22,7 @@ namespace vws
         void run();
 
     private:
+        void initialize_constraints();
         void initialize_clients();
         void initialize_missions();
         void initialize_traffic_lights();
@@ -31,6 +33,7 @@ namespace vws
         void log_experiment_snapshot() const;
         void print_registered_clients() const;
         void print_assigned_missions() const;
+        void print_scenario_constraints() const;
         void print_vehicle_states() const;
         void print_traffic_lights() const;
         void print_state_validation_summary() const;
@@ -42,6 +45,7 @@ namespace vws
         ClientRegistry client_registry_;
         AssignmentService assignment_service_;
         ExperimentLogService experiment_log_service_;
+        ScenarioConstraintService scenario_constraint_service_;
         ReadinessService readiness_service_;
         StateReportService state_report_service_;
         StateValidationService state_validation_service_;

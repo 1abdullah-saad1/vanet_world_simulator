@@ -1,6 +1,7 @@
 #pragma once
 
 #include "domain/Client.hpp"
+#include "domain/ScenarioConstraints.hpp"
 #include "domain/TrafficLightNode.hpp"
 #include "domain/VehicleMission.hpp"
 #include "domain/VehicleStateReport.hpp"
@@ -89,11 +90,29 @@ namespace vws
             return traffic_lights_;
         }
 
+        void set_constraints(const ScenarioConstraints &constraints)
+        {
+            constraints_ = constraints;
+            has_constraints_ = true;
+        }
+
+        bool has_constraints() const
+        {
+            return has_constraints_;
+        }
+
+        const ScenarioConstraints &constraints() const
+        {
+            return constraints_;
+        }
+
     private:
         std::vector<Client> clients_;
         std::vector<VehicleMission> missions_;
         std::vector<VehicleStateReport> vehicle_states_;
         std::vector<TrafficLightNode> traffic_lights_;
+        ScenarioConstraints constraints_;
+        bool has_constraints_ = false;
     };
 
 } // namespace vws
