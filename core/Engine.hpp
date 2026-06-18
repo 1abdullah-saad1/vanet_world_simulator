@@ -30,9 +30,10 @@ namespace vws
         void initialize_clients();
         void initialize_missions();
         void initialize_traffic_lights();
+        void run_tick_cycle();
         void advance_traffic_light_control();
-        void collect_state_reports();
-        void collect_packet_events();
+        void collect_state_reports(Tick tick);
+        void collect_packet_events(Tick tick);
         void evaluate_mission_progress();
         void validate_state_reports();
         void evaluate_client_health();
@@ -48,6 +49,7 @@ namespace vws
         void print_traffic_lights() const;
         void print_state_validation_summary() const;
         void print_client_health_summary() const;
+        void print_tick_execution_summary() const;
         void print_readiness_status() const;
         void print_virtual_client_plan() const;
 
@@ -72,6 +74,8 @@ namespace vws
         StateValidationSummary state_validation_summary_;
         ReadinessStatus readiness_status_;
         VirtualClientPlan virtual_client_plan_;
+        Tick current_tick_ = 0;
+        Tick total_ticks_ = 3;
     };
 
 } // namespace vws

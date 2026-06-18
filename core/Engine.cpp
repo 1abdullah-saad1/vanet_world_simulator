@@ -25,18 +25,18 @@ namespace vws
           packet_ledger_summary_{},
           state_validation_summary_{},
           readiness_status_{},
-          virtual_client_plan_{} {}
+          virtual_client_plan_{},
+          current_tick_{0},
+          total_ticks_{3} {}
 
     void Engine::run()
     {
-        std::cout << "VWS v0.0.13 - Packet Ledger Tracking\n";
+        std::cout << "VWS v0.0.14 - Tick Orchestration Cycle\n";
         initialize_constraints();
         initialize_clients();
         initialize_missions();
         initialize_traffic_lights();
-        advance_traffic_light_control();
-        collect_state_reports();
-        collect_packet_events();
+        run_tick_cycle();
         evaluate_mission_progress();
         validate_state_reports();
         evaluate_client_health();
@@ -52,6 +52,7 @@ namespace vws
         print_traffic_lights();
         print_state_validation_summary();
         print_client_health_summary();
+        print_tick_execution_summary();
         print_readiness_status();
         print_virtual_client_plan();
     }
@@ -76,22 +77,31 @@ namespace vws
         traffic_light_service_.register_demo_traffic_lights(world_);
     }
 
+    void Engine::run_tick_cycle()
+    {
+        for (Tick tick = 1; tick <= total_ticks_; ++tick)
+        {
+            current_tick_ = tick;
+            advance_traffic_light_control();
+            collect_state_reports(current_tick_);
+            collect_packet_events(current_tick_);
+        }
+    }
+
     void Engine::advance_traffic_light_control()
     {
         constexpr std::uint32_t elapsed_seconds = 5;
         traffic_light_control_service_.apply_control_step(world_, elapsed_seconds);
     }
 
-    void Engine::collect_state_reports()
+    void Engine::collect_state_reports(Tick tick)
     {
-        constexpr Tick initial_tick = 1;
-        state_report_service_.submit_demo_state_reports(world_, initial_tick);
+        state_report_service_.submit_demo_state_reports(world_, tick);
     }
 
-    void Engine::collect_packet_events()
+    void Engine::collect_packet_events(Tick tick)
     {
-        constexpr Tick packet_tick = 1;
-        packet_ledger_service_.generate_demo_packet_events(world_, packet_tick);
+        packet_ledger_service_.generate_demo_packet_events(world_, tick);
         packet_ledger_summary_ = packet_ledger_service_.summarize(world_);
     }
 
@@ -107,8 +117,8 @@ namespace vws
 
     void Engine::evaluate_client_health()
     {
-        constexpr Tick reference_tick = 1;
-        constexpr Tick max_staleness_ticks = 0;
+        const Tick reference_tick = current_tick_;
+        constexpr Tick max_staleness_ticks = 1;
         client_health_summary_ = client_health_service_.evaluate(world_, reference_tick, max_staleness_ticks);
     }
 
@@ -279,6 +289,13 @@ namespace vws
                       << ", healthy=" << (status.healthy ? "true" : "false")
                       << "\n";
         }
+    }
+
+    void Engine::print_tick_execution_summary() const
+    {
+        std::cout << "Tick execution summary\n";
+        std::cout << "- total_ticks_executed=" << current_tick_ << "\n";
+        std::cout << "- configured_total_ticks=" << total_ticks_ << "\n";
     }
 
     void Engine::print_readiness_status() const
